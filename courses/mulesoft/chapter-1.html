@@ -214,6 +214,12 @@
     .flow-dash{animation:none;}
     html{scroll-behavior:auto;}
   }
+
+  /* clickable sidebar links */
+  .sidenav-list li{display:block;padding:0;}
+  .sidenav-list li a{display:flex;gap:9px;align-items:baseline;padding:8px 11px;color:var(--ink-soft);border:none;border-radius:9px;font-size:13px;}
+  .sidenav-list li a:hover{background:#EEF3FA;text-decoration:none;border:none;}
+  .sidenav-list li.active a{color:var(--flow-deep);font-weight:600;}
 </style>
 </head>
 <body>
@@ -248,18 +254,18 @@
   <aside class="sidenav">
     <div class="sidenav-head">The full course map</div>
     <ol class="sidenav-list">
-      <li class="active"><b>01</b> Foundations &amp; first run</li>
-      <li><b>02</b> Mule events &amp; HTTP Listener</li>
-      <li><b>03</b> Calling APIs (HTTP Request)</li>
-      <li><b>04</b> File &amp; Database connectors</li>
-      <li><b>05</b> DataWeave 2.0 transforms</li>
-      <li><b>06</b> Routers &amp; flow control</li>
-      <li><b>07</b> Error handling</li>
-      <li><b>08</b> API design (RAML / APIkit)</li>
-      <li><b>09</b> Batch processing</li>
-      <li><b>10</b> Deploy to CloudHub</li>
-      <li><b>11</b> Testing with MUnit</li>
-      <li><b>12</b> Cert prep &amp; portfolio</li>
+      <li class="active"><a href="chapter-1.html"><b>01</b> Foundations &amp; first run</a></li>
+      <li><a href="chapter-2.html"><b>02</b> Mule events &amp; HTTP Listener</a></li>
+      <li><a href="chapter-3.html"><b>03</b> Calling APIs (HTTP Request)</a></li>
+      <li><a href="chapter-4.html"><b>04</b> File &amp; Database connectors</a></li>
+      <li><a href="chapter-5.html"><b>05</b> DataWeave 2.0 transforms</a></li>
+      <li><a href="chapter-6.html"><b>06</b> Routers &amp; flow control</a></li>
+      <li><a href="chapter-7.html"><b>07</b> Error handling</a></li>
+      <li><a href="chapter-8.html"><b>08</b> API design (RAML / APIkit)</a></li>
+      <li><a href="chapter-9.html"><b>09</b> Batch processing</a></li>
+      <li><a href="chapter-10.html"><b>10</b> Deploy to CloudHub</a></li>
+      <li><a href="chapter-11.html"><b>11</b> Testing with MUnit</a></li>
+      <li><a href="chapter-12.html"><b>12</b> Cert prep &amp; portfolio</a></li>
     </ol>
     <a class="sidenav-back" href="index.html">← All chapters</a>
   </aside>
