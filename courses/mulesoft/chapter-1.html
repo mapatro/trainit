@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1 · Foundations &amp; First Run — MuleSoft · TrainIt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#13233B;
+    --ink-soft:#475569;
+    --paper:#F5F7FA;
+    --card:#FFFFFF;
+    --line:#E3E8EF;
+    --flow:#1D6FE0;
+    --flow-deep:#0B4FB0;
+    --flow-soft:#E8F1FD;
+    --signal:#E8633A;
+    --signal-soft:#FCEBE4;
+    --check:#0E9C86;
+    --check-soft:#E1F4F0;
+    --term-bg:#0E1B2E;
+    --term-line:#26384F;
+    --term-text:#C9D7E8;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:16.5px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:0 22px 100px;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    background:linear-gradient(160deg,#13233B 0%,#1B3358 60%,#1D6FE0 160%);
+    color:#fff;padding:54px 0 46px;margin-bottom:8px;
+    position:relative;overflow:hidden;
+  }
+  header.hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.10) 1px,transparent 0);
+    background-size:26px 26px;opacity:.5;pointer-events:none;
+  }
+  .hero .wrap{position:relative;z-index:1;padding-bottom:0;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:#9EC2F2;margin-bottom:14px;
+  }
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0 0 14px;letter-spacing:-.02em;
+  }
+  .hero h1 span{color:#7FB2F5;}
+  .hero p.lead{font-size:17px;color:#D6E2F2;max-width:60ch;margin:0;}
+  .hero .meta{
+    display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;
+  }
+  .pill{
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);
+    color:#E6EEFA;padding:6px 11px;border-radius:999px;letter-spacing:.02em;
+  }
+
+  /* ---------- ROADMAP ---------- */
+  .roadmap{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 22px 8px;margin:30px 0 12px;
+  }
+  .roadmap h2{font-family:'Space Grotesk',sans-serif;font-size:15px;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 16px;font-weight:600;}
+  .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+  .chip{
+    display:flex;gap:10px;align-items:baseline;padding:9px 11px;border-radius:9px;
+    border:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);background:#FCFDFE;
+  }
+  .chip b{font-family:'JetBrains Mono',monospace;font-size:12px;color:#94A3B8;}
+  .chip.active{background:var(--flow-soft);border-color:#BAD6F8;color:var(--flow-deep);font-weight:600;}
+  .chip.active b{color:var(--flow);}
+
+  /* ---------- STATIONS ---------- */
+  .station{position:relative;padding-top:34px;margin-top:8px;}
+  .station::before{ /* flow connector line */
+    content:"";position:absolute;left:18px;top:-14px;width:2px;height:30px;
+    background:repeating-linear-gradient(var(--line) 0 4px,transparent 4px 8px);
+  }
+  .station:first-of-type::before{display:none;}
+  .st-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+  .node{
+    flex:0 0 auto;width:38px;height:38px;border-radius:11px;
+    background:var(--flow);color:#fff;display:grid;place-items:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;
+    box-shadow:0 4px 12px rgba(29,111,224,.28);
+  }
+  .st-head h2{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:0;letter-spacing:-.01em;line-height:1.15;}
+  .station > p{color:var(--ink-soft);margin:8px 0 14px;}
+  .station .sub{font-weight:600;color:var(--ink);margin:22px 0 6px;font-size:15.5px;
+    font-family:'Space Grotesk',sans-serif;}
+
+  /* ---------- FIGURES ---------- */
+  figure{margin:18px 0;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:20px 18px 12px;}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-size:13px;color:var(--ink-soft);text-align:center;margin-top:10px;
+    font-family:'JetBrains Mono',monospace;letter-spacing:.01em;}
+  .flow-dash{stroke-dasharray:6 6;animation:dash 1.1s linear infinite;}
+  @keyframes dash{to{stroke-dashoffset:-24;}}
+
+  /* ---------- DO / TEST / PROMPT BLOCKS ---------- */
+  .block{border-radius:var(--radius);padding:16px 18px;margin:16px 0;}
+  .block .tag{
+    display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;
+    padding:3px 9px;border-radius:6px;margin-bottom:10px;
+  }
+  .do{background:#fff;border:1px solid var(--line);}
+  .do .tag{background:var(--signal-soft);color:#B8421C;}
+  .do ol{margin:4px 0 2px;padding-left:20px;}
+  .do li{margin:7px 0;}
+  .do li::marker{color:var(--signal);font-weight:600;}
+
+  .test{background:var(--check-soft);border:1px solid #BFE6DE;}
+  .test .tag{background:#fff;color:#0B7D6B;border:1px solid #BFE6DE;}
+  .test ul{list-style:none;margin:4px 0 0;padding:0;}
+  .test li{position:relative;padding-left:28px;margin:8px 0;color:#0d5045;}
+  .test li::before{content:"✓";position:absolute;left:4px;top:0;color:var(--check);font-weight:700;}
+
+  /* ---------- CLAUDE CODE PROMPT ---------- */
+  .prompt{background:var(--term-bg);border:1px solid var(--term-line);border-radius:var(--radius);
+    margin:14px 0;overflow:hidden;}
+  .prompt .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;
+    border-bottom:1px solid var(--term-line);background:#0A1626;}
+  .prompt .bar .dot{width:10px;height:10px;border-radius:50%;}
+  .d1{background:#E8633A;}.d2{background:#E8B23A;}.d3{background:#3AC58A;}
+  .prompt .bar span{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#7E93AC;margin-left:6px;}
+  .prompt .bar button{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;
+    background:transparent;border:1px solid var(--term-line);color:#9DB2CC;border-radius:6px;
+    padding:4px 10px;cursor:pointer;transition:.15s;}
+  .prompt .bar button:hover{background:var(--flow);border-color:var(--flow);color:#fff;}
+  .prompt pre{margin:0;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;
+    line-height:1.6;color:var(--term-text);white-space:pre-wrap;word-break:break-word;}
+  .prompt pre .pre-mark{color:#5BC58A;user-select:none;}
+
+  code.inline{font-family:'JetBrains Mono',monospace;font-size:.86em;background:#EEF2F7;
+    border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:var(--flow-deep);}
+
+  /* ---------- COMPARISON ---------- */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+  .vcard{border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px;background:#fff;}
+  .vcard.pick{border-color:#BAD6F8;background:var(--flow-soft);}
+  .vcard h4{font-family:'Space Grotesk',sans-serif;margin:0 0 4px;font-size:16px;}
+  .vcard .badge{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--flow);font-weight:600;}
+  .vcard ul{margin:10px 0 0;padding-left:18px;font-size:14px;color:var(--ink-soft);}
+  .vcard li{margin:5px 0;}
+
+  /* ---------- LINKS / MISC ---------- */
+  a{color:var(--flow);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;}
+  a:hover{border-bottom-color:var(--flow);}
+  .more{font-size:13.5px;color:var(--ink-soft);margin:10px 0 2px;}
+  .more::before{content:"↗ ";color:var(--flow);}
+  .note{font-size:13.5px;color:var(--ink-soft);background:#FFF8F1;border-left:3px solid var(--signal);
+    padding:10px 14px;border-radius:0 9px 9px 0;margin:14px 0;}
+
+  .finish{background:linear-gradient(160deg,#0E9C86,#0B7D6B);color:#fff;border-radius:var(--radius);
+    padding:26px 24px;margin-top:40px;}
+  .finish h2{font-family:'Space Grotesk',sans-serif;margin:0 0 8px;font-size:22px;}
+  .finish p{margin:6px 0;color:#D8F3ED;}
+  .finish .next{font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:14px;
+    background:rgba(255,255,255,.12);padding:10px 14px;border-radius:9px;display:inline-block;}
+
+  footer{text-align:center;font-size:12.5px;color:#94A3B8;margin-top:40px;
+    font-family:'JetBrains Mono',monospace;}
+
+  @media(max-width:560px){
+    .versus{grid-template-columns:1fr;}
+    .st-head h2{font-size:21px;}
+    body{font-size:16px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .flow-dash{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:#0B1626;border-bottom:1px solid #26384F;font-family:'JetBrains Mono',monospace;">
+  <div style="max-width:840px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:14px;font-size:12.5px;">
+    <a href="../../index.html" style="color:#7FB2F5;font-weight:600;border:none;">Train<span style="color:#fff;">It</span></a>
+    <span style="color:#475569;">/</span>
+    <a href="index.html" style="color:#9DB2CC;border:none;">MuleSoft</a>
+    <span style="color:#475569;">/</span>
+    <span style="color:#7E93AC;">Chapter 1</span>
+    <a href="index.html" style="margin-left:auto;color:#9DB2CC;border:none;">← All chapters</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Learn MuleSoft · with Claude Code as your tutor</div>
+    <h1>Chapter 1 — <span>Foundations &amp; First Run</span></h1>
+    <p class="lead">No coding background needed. By the end of today you'll understand what MuleSoft does, set up your tools, and run your first Mule app on your own machine.</p>
+    <div class="meta">
+      <span class="pill">⏱ ~90 minutes</span>
+      <span class="pill">🎯 Goal: MuleSoft Certified Developer Level&nbsp;1</span>
+      <span class="pill">🧰 VS Code + Anypoint Code Builder</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ROADMAP -->
+  <section class="roadmap">
+    <h2>The full course map</h2>
+    <div class="chips">
+      <div class="chip active"><b>01</b> Foundations &amp; first run</div>
+      <div class="chip"><b>02</b> Mule events &amp; HTTP Listener</div>
+      <div class="chip"><b>03</b> Calling APIs (HTTP Request)</div>
+      <div class="chip"><b>04</b> File &amp; Database connectors</div>
+      <div class="chip"><b>05</b> DataWeave 2.0 transforms</div>
+      <div class="chip"><b>06</b> Routers &amp; flow control</div>
+      <div class="chip"><b>07</b> Error handling</div>
+      <div class="chip"><b>08</b> API design (RAML / APIkit)</div>
+      <div class="chip"><b>09</b> Batch processing</div>
+      <div class="chip"><b>10</b> Deploy to CloudHub</div>
+      <div class="chip"><b>11</b> Testing with MUnit</div>
+      <div class="chip"><b>12</b> Cert prep &amp; portfolio</div>
+    </div>
+  </section>
+  <p class="note">Each chapter follows the same rhythm: a quick idea, a diagram, <b>Do this</b> steps, a <b>Claude Code</b> prompt to lean on, and a <b>Check yourself</b> test. Work through them in order.</p>
+
+  <!-- STATION 1 -->
+  <section class="station">
+    <div class="st-head"><div class="node">1</div><h2>What integration actually means</h2></div>
+    <p>Companies run many separate systems — a sales tool, a database, an email service, a payment provider. <b>Integration</b> is making them talk to each other reliably. MuleSoft is the tool in the middle that connects them, so you don't wire every system to every other system by hand.</p>
+
+    <figure>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Tangled point-to-point connections versus a clean MuleSoft hub">
+        <!-- LEFT: tangled -->
+        <text x="95" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#94A3B8">WITHOUT MULESOFT</text>
+        <g stroke="#E8633A" stroke-width="1.6" opacity="0.8">
+          <line x1="40" y1="70" x2="150" y2="120"/><line x1="40" y1="70" x2="60" y2="170"/>
+          <line x1="150" y1="60" x2="60" y2="170"/><line x1="150" y1="60" x2="160" y2="175"/>
+          <line x1="40" y1="70" x2="160" y2="175"/><line x1="150" y1="120" x2="60" y2="170"/>
+          <line x1="150" y1="60" x2="150" y2="120"/><line x1="150" y1="120" x2="160" y2="175"/>
+        </g>
+        <g font-family="Inter,sans-serif" font-size="11" fill="#13233B" text-anchor="middle">
+          <g><rect x="14" y="56" width="52" height="28" rx="6" fill="#fff" stroke="#CBD5E1"/><text x="40" y="74">CRM</text></g>
+          <g><rect x="124" y="46" width="52" height="28" rx="6" fill="#fff" stroke="#CBD5E1"/><text x="150" y="64">DB</text></g>
+          <g><rect x="124" y="106" width="52" height="28" rx="6" fill="#fff" stroke="#CBD5E1"/><text x="150" y="124">App</text></g>
+          <g><rect x="34" y="156" width="52" height="28" rx="6" fill="#fff" stroke="#CBD5E1"/><text x="60" y="174">Email</text></g>
+          <g><rect x="134" y="161" width="52" height="28" rx="6" fill="#fff" stroke="#CBD5E1"/><text x="160" y="179">Pay</text></g>
+        </g>
+        <!-- divider -->
+        <line x1="320" y1="30" x2="320" y2="200" stroke="#E3E8EF" stroke-width="1.5"/>
+        <!-- RIGHT: hub -->
+        <text x="490" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#1D6FE0">WITH MULESOFT</text>
+        <g stroke="#1D6FE0" stroke-width="1.8">
+          <line x1="490" y1="115" x2="400" y2="60"/><line x1="490" y1="115" x2="590" y2="60"/>
+          <line x1="490" y1="115" x2="390" y2="170"/><line x1="490" y1="115" x2="590" y2="170"/>
+          <line x1="490" y1="115" x2="490" y2="50"/>
+        </g>
+        <circle cx="490" cy="115" r="30" fill="#1D6FE0"/>
+        <text x="490" y="112" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#fff" font-weight="600">Mule</text>
+        <text x="490" y="124" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="11" fill="#fff" font-weight="600">app</text>
+        <g font-family="Inter,sans-serif" font-size="11" fill="#13233B" text-anchor="middle">
+          <g><rect x="364" y="46" width="52" height="26" rx="6" fill="#fff" stroke="#BAD6F8"/><text x="390" y="63">CRM</text></g>
+          <g><rect x="464" y="24" width="52" height="26" rx="6" fill="#fff" stroke="#BAD6F8"/><text x="490" y="41">DB</text></g>
+          <g><rect x="564" y="46" width="52" height="26" rx="6" fill="#fff" stroke="#BAD6F8"/><text x="590" y="63">App</text></g>
+          <g><rect x="360" y="158" width="56" height="26" rx="6" fill="#fff" stroke="#BAD6F8"/><text x="388" y="175">Email</text></g>
+          <g><rect x="564" y="158" width="52" height="26" rx="6" fill="#fff" stroke="#BAD6F8"/><text x="590" y="175">Pay</text></g>
+        </g>
+      </svg>
+      <figcaption>Many tangled wires → one clean hub. That's the whole pitch.</figcaption>
+    </figure>
+
+    <div class="prompt">
+      <div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · ask your tutor</span><button onclick="copyPrompt(this)">Copy</button></div>
+      <pre><span class="pre-mark">› </span>I'm brand new to MuleSoft. In plain English with one real-world example, explain what "system integration" is and why a company would pay for a tool like MuleSoft instead of writing the connections themselves.</pre>
+    </div>
+    <p class="more"><a href="https://www.mulesoft.com/resources/api/what-is-mulesoft" target="_blank" rel="noopener">More: What is MuleSoft? (official overview)</a></p>
+  </section>
+
+  <!-- STATION 2 -->
+  <section class="station">
+    <div class="st-head"><div class="node">2</div><h2>APIs and HTTP — the language systems speak</h2></div>
+    <p>An <b>API</b> is a doorway one system opens so others can ask it for data or actions. Most APIs talk over <b>HTTP</b> — the same protocol your browser uses. One side sends a <b>request</b>, the other sends back a <b>response</b>. Learn this picture once and most of MuleSoft clicks into place.</p>
+
+    <figure>
+      <svg viewBox="0 0 640 250" role="img" aria-label="HTTP request and response between a client and a server">
+        <!-- client -->
+        <rect x="20" y="92" width="120" height="66" rx="12" fill="#13233B"/>
+        <text x="80" y="120" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="14" fill="#fff" font-weight="600">Client</text>
+        <text x="80" y="138" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#9EC2F2">browser / app</text>
+        <!-- server -->
+        <rect x="500" y="92" width="120" height="66" rx="12" fill="#1D6FE0"/>
+        <text x="560" y="120" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="14" fill="#fff" font-weight="600">Server</text>
+        <text x="560" y="138" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#D6E2F2">the API</text>
+        <!-- request arrow -->
+        <line class="flow-dash" x1="146" y1="108" x2="492" y2="108" stroke="#E8633A" stroke-width="2.5"/>
+        <polygon points="492,108 480,102 480,114" fill="#E8633A"/>
+        <text x="320" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#E8633A">REQUEST  →</text>
+        <!-- response arrow -->
+        <line class="flow-dash" x1="494" y1="146" x2="148" y2="146" stroke="#0E9C86" stroke-width="2.5"/>
+        <polygon points="148,146 160,140 160,152" fill="#0E9C86"/>
+        <text x="320" y="166" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#0E9C86">←  RESPONSE</text>
+        <!-- request card -->
+        <rect x="206" y="6" width="230" height="62" rx="9" fill="#FCEBE4" stroke="#F2C3AE"/>
+        <text x="216" y="24" font-family="JetBrains Mono,monospace" font-size="11" fill="#B8421C" font-weight="600">GET /customers/42</text>
+        <text x="216" y="40" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#9A5b46">Headers: who you are, format</text>
+        <text x="216" y="56" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#9A5b46">Body: data you send (optional)</text>
+        <!-- response card -->
+        <rect x="206" y="184" width="230" height="60" rx="9" fill="#E1F4F0" stroke="#9FD8CC"/>
+        <text x="216" y="202" font-family="JetBrains Mono,monospace" font-size="11" fill="#0B7D6B" font-weight="600">200 OK</text>
+        <text x="216" y="218" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#3a7a6e">Status: did it work?</text>
+        <text x="216" y="234" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#3a7a6e">Body: { "name": "Asha" }</text>
+      </svg>
+      <figcaption>Method + path + headers + body  →  status + body back. That's an HTTP call.</figcaption>
+    </figure>
+
+    <p>Two things worth memorizing: the common <b>methods</b> are <code class="inline">GET</code> (read), <code class="inline">POST</code> (create), <code class="inline">PUT</code> (update), <code class="inline">DELETE</code> (remove); and <b>status codes</b> tell you the outcome — <code class="inline">2xx</code> success, <code class="inline">4xx</code> you made a mistake, <code class="inline">5xx</code> the server broke.</p>
+
+    <div class="prompt">
+      <div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · ask your tutor</span><button onclick="copyPrompt(this)">Copy</button></div>
+      <pre><span class="pre-mark">› </span>Quiz me on HTTP basics for a beginner: methods (GET/POST/PUT/DELETE) and status codes (2xx/4xx/5xx). Ask me 5 short questions one at a time, wait for my answer, then tell me if I'm right and why.</pre>
+    </div>
+    <p class="more"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview" target="_blank" rel="noopener">More: How HTTP works (MDN, beginner-friendly)</a></p>
+  </section>
+
+  <!-- STATION 3 -->
+  <section class="station">
+    <div class="st-head"><div class="node">3</div><h2>The MuleSoft vocabulary</h2></div>
+    <p>You build a <b>Mule app</b>. Inside it are <b>flows</b> — step-by-step pipelines. Data travels through a flow as a <b>Mule event</b>. Each step is either a <b>connector</b> (talks to an outside system) or a <b>core component</b> (does logic, like transforming data).</p>
+
+    <figure>
+      <svg viewBox="0 0 640 200" role="img" aria-label="A Mule flow with a listener, transform, and logger, with an event flowing through">
+        <rect x="20" y="46" width="600" height="120" rx="14" fill="#F8FAFD" stroke="#D7E3F4"/>
+        <text x="40" y="38" font-family="JetBrains Mono,monospace" font-size="12" fill="#1D6FE0" font-weight="600">FLOW: getCustomer</text>
+
+        <!-- source -->
+        <rect x="44" y="78" width="140" height="58" rx="10" fill="#13233B"/>
+        <text x="114" y="103" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12.5" fill="#fff" font-weight="600">HTTP Listener</text>
+        <text x="114" y="120" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#9EC2F2">source · starts the flow</text>
+
+        <!-- arrow + event token -->
+        <line x1="184" y1="107" x2="248" y2="107" stroke="#1D6FE0" stroke-width="2"/>
+        <polygon points="248,107 238,102 238,112" fill="#1D6FE0"/>
+
+        <!-- transform -->
+        <rect x="250" y="78" width="140" height="58" rx="10" fill="#fff" stroke="#1D6FE0" stroke-width="1.6"/>
+        <text x="320" y="103" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12.5" fill="#13233B" font-weight="600">Transform</text>
+        <text x="320" y="120" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#475569">core · reshape data</text>
+
+        <line x1="390" y1="107" x2="454" y2="107" stroke="#1D6FE0" stroke-width="2"/>
+        <polygon points="454,107 444,102 444,112" fill="#1D6FE0"/>
+
+        <!-- logger -->
+        <rect x="456" y="78" width="140" height="58" rx="10" fill="#fff" stroke="#CBD5E1"/>
+        <text x="526" y="103" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="12.5" fill="#13233B" font-weight="600">Logger</text>
+        <text x="526" y="120" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#475569">core · prints output</text>
+
+        <!-- event token -->
+        <g>
+          <rect x="206" y="150" width="228" height="26" rx="13" fill="#E8633A"/>
+          <text x="320" y="168" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10.5" fill="#fff">event = payload + attributes + variables</text>
+        </g>
+      </svg>
+      <figcaption>A flow runs left to right. The "event" is the package of data carried between steps.</figcaption>
+    </figure>
+
+    <p>Don't memorize every term yet — just recognize them. We build a real flow like this in Chapter 2.</p>
+    <div class="prompt">
+      <div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · ask your tutor</span><button onclick="copyPrompt(this)">Copy</button></div>
+      <pre><span class="pre-mark">› </span>Define these MuleSoft terms for a beginner in one sentence each, with a kitchen or factory analogy: Mule app, flow, Mule event, connector, core component, payload.</pre>
+    </div>
+    <p class="more"><a href="https://docs.mulesoft.com/mule-runtime/latest/about-mule-event" target="_blank" rel="noopener">More: The Mule event explained (official docs)</a></p>
+  </section>
+
+  <!-- STATION 4 -->
+  <section class="station">
+    <div class="st-head"><div class="node">4</div><h2>Pick your tool</h2></div>
+    <p>MuleSoft has two IDEs (the program you build in). You'll use <b>Anypoint Code Builder</b> day-to-day because it's the modern, AI-friendly one built on VS Code — and it sits right next to Claude Code. Just know that <b>Anypoint Studio</b> exists too, because the certification and many older tutorials still reference it.</p>
+
+    <div class="versus">
+      <div class="vcard pick">
+        <span class="badge">Use this one</span>
+        <h4>Anypoint Code Builder</h4>
+        <ul>
+          <li>Runs inside VS Code</li>
+          <li>Modern, AI-assisted, Git built in</li>
+          <li>MuleSoft's stated future direction</li>
+          <li>Lives beside Claude Code</li>
+        </ul>
+      </div>
+      <div class="vcard">
+        <span class="badge" style="color:#94A3B8">Know it exists</span>
+        <h4>Anypoint Studio</h4>
+        <ul>
+          <li>Older, built on Eclipse</li>
+          <li>Drag-and-drop canvas</li>
+          <li>Referenced by the Level 1 cert</li>
+          <li>We'll peek at it later</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Both build the exact same thing — a Mule app made of XML config and DataWeave. Skills transfer 100% between them. We commit to Code Builder.</p>
+    <p class="more"><a href="https://www.mulesoft.com/platform/api/anypoint-code-builder" target="_blank" rel="noopener">More: Anypoint Code Builder overview</a></p>
+  </section>
+
+  <!-- STATION 5 -->
+  <section class="station">
+    <div class="st-head"><div class="node">5</div><h2>Set up your workspace</h2></div>
+    <p>Five installs. Anypoint Code Builder handles Java and Maven for you, so the list is shorter than it looks. (On Windows 11, just accept the defaults in each installer.)</p>
+
+    <div class="block do">
+      <span class="tag">● Do this</span>
+      <ol>
+        <li><b>Create a free Anypoint Platform account</b> — 30-day trial, no credit card. <a href="https://anypoint.mulesoft.com/login/signup" target="_blank" rel="noopener">Sign up here</a>.</li>
+        <li><b>Install VS Code</b> — the editor everything runs in. <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">Download</a>.</li>
+        <li><b>Install Git</b> — for saving versions of your work. <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Download</a>.</li>
+        <li><b>Add the Anypoint Extension Pack in VS Code</b> — open the Extensions panel (<code class="inline">Ctrl+Shift+X</code>), search <i>Anypoint Extension Pack</i>, install the full pack, then restart VS Code. <a href="https://docs.mulesoft.com/anypoint-code-builder/start-acb" target="_blank" rel="noopener">Setup guide</a>.</li>
+        <li><b>Install Claude Code</b> — your tutor in the terminal. Requires a paid Claude plan (Pro/Max) or API account. <a href="https://docs.claude.com/en/docs/claude-code/overview" target="_blank" rel="noopener">Install guide</a>. The npm way: <code class="inline">npm install -g @anthropic-ai/claude-code</code> (needs Node.js 18+), or use the native installer from the docs.</li>
+      </ol>
+    </div>
+
+    <p class="note">Order matters: install Git and VS Code <b>before</b> the Anypoint Extension Pack. If the pack acts up, uninstall it, restart VS Code, and reinstall.</p>
+
+    <div class="block test">
+      <span class="tag">✓ Check yourself</span>
+      <ul>
+        <li>You can log in at anypoint.mulesoft.com and see the dashboard.</li>
+        <li>VS Code opens, and the Extensions panel lists <i>Anypoint Extension Pack</i> as enabled.</li>
+        <li>A MuleSoft icon appears in the VS Code left activity bar.</li>
+        <li>In a terminal, <code class="inline">claude --version</code> prints a version number.</li>
+      </ul>
+    </div>
+
+    <div class="prompt">
+      <div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · if a step fails</span><button onclick="copyPrompt(this)">Copy</button></div>
+      <pre><span class="pre-mark">› </span>I'm on Windows 11 setting up MuleSoft Anypoint Code Builder in VS Code. Here's the error / what I see: [paste it]. Walk me through fixing it one step at a time, and don't assume I know developer jargon.</pre>
+    </div>
+  </section>
+
+  <!-- STATION 6 -->
+  <section class="station">
+    <div class="st-head"><div class="node">6</div><h2>First win — run a Mule app</h2></div>
+    <p>Now the payoff: create a project and run it. Code Builder updates often, so menu wording may differ slightly from below — if it does, ask Claude Code (next station) or follow the official tutorial linked at the end.</p>
+
+    <div class="block do">
+      <span class="tag">● Do this</span>
+      <ol>
+        <li>In VS Code, open the <b>Command Palette</b>: <code class="inline">Ctrl+Shift+P</code>.</li>
+        <li>Type <b>Mule</b> and choose the option to <b>create a new Mule project</b> (you can also start it from the MuleSoft icon in the activity bar).</li>
+        <li>Give it a name like <code class="inline">hello-mule</code> and accept the suggested Mule runtime version.</li>
+        <li>Wait for it to finish setting up — the first time pulls some files in the background. Keep the project's root folder open.</li>
+        <li>Open the Command Palette again and choose <b>Run / Debug the Mule project</b>. Watch the terminal for a line that says the app is <b>DEPLOYED</b> or started.</li>
+      </ol>
+    </div>
+
+    <div class="block test">
+      <span class="tag">✓ Check yourself</span>
+      <ul>
+        <li>The project appears in VS Code with a <code class="inline">pom.xml</code> file and a <code class="inline">src</code> folder.</li>
+        <li>Running it shows a <i>started</i> / <i>DEPLOYED</i> message in the terminal with no red errors.</li>
+        <li>You can stop the app and run it again without it breaking.</li>
+      </ul>
+    </div>
+    <p class="note">If you'd rather build a tiny "Hello World" endpoint you can open in a browser, that's exactly what Chapter 2 does — one HTTP Listener returning a message. Getting the project to run cleanly today is the real Chapter 1 win.</p>
+    <p class="more"><a href="https://docs.mulesoft.com/anypoint-code-builder/tutorials" target="_blank" rel="noopener">More: Official Anypoint Code Builder tutorials (build your first app)</a></p>
+  </section>
+
+  <!-- STATION 7 -->
+  <section class="station">
+    <div class="st-head"><div class="node">7</div><h2>Your AI tutor: how to use Claude Code</h2></div>
+    <p>Claude Code isn't just for writing code — for you it's a patient teacher that can see your project. Open a terminal, <code class="inline">cd</code> into your project folder, type <code class="inline">claude</code>, and talk to it in plain English. Use these any time you're stuck.</p>
+
+    <div class="prompt">
+      <div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · explain my project</span><button onclick="copyPrompt(this)">Copy</button></div>
+      <pre><span class="pre-mark">› </span>Look at this Mule project and explain, like I'm new to coding, what each file and folder is for. What is pom.xml? What's inside the src folder?</pre>
+    </div>
+    <div class="prompt">
+      <div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · learning coach</span><button onclick="copyPrompt(this)">Copy</button></div>
+      <pre><span class="pre-mark">› </span>Act as my MuleSoft tutor for the Certified Developer Level 1 path. I just finished "Chapter 1: foundations and first run." Ask me 3 questions to check I understood integration, HTTP, and Mule flows, then tell me what to focus on next.</pre>
+    </div>
+    <div class="note">Tip: Claude Code can read your files but won't change anything unless you ask it to. It's safe to use it purely to <b>ask questions</b> while you learn.</div>
+    <p class="more"><a href="https://docs.claude.com/en/docs/claude-code/overview" target="_blank" rel="noopener">More: What Claude Code can do</a></p>
+  </section>
+
+  <!-- FINISH -->
+  <section class="finish">
+    <h2>Chapter 1 complete 🎉</h2>
+    <p>You now know what MuleSoft is for, how APIs and HTTP work, the core vocabulary, and you have a working environment with a Mule app that runs.</p>
+    <p><b>Before moving on,</b> make sure every "Check yourself" box above is green for you. If one isn't, that's the perfect thing to paste into Claude Code.</p>
+    <div class="next">Next → Chapter 2: Mule events &amp; the HTTP Listener — build a real "Hello World" endpoint you open in a browser.</div>
+  </section>
+
+  <footer>TrainIt · MuleSoft × Claude Code · Chapter 1 of 12 · Built for a beginner, aimed at a job.</footer>
+
+</div>
+
+<script>
+  function copyPrompt(btn){
+    var pre = btn.closest('.prompt').querySelector('pre');
+    var text = pre.innerText.replace(/^›\s?/,'').trim();
+    navigator.clipboard.writeText(text).then(function(){
+      var old = btn.textContent; btn.textContent = 'Copied ✓';
+      setTimeout(function(){ btn.textContent = old; }, 1400);
+    }).catch(function(){
+      var old = btn.textContent; btn.textContent = 'Select & copy';
+      setTimeout(function(){ btn.textContent = old; }, 1600);
+    });
+  }
+</script>
+</body>
+</html>

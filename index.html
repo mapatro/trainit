@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TrainIt — Learn it. Train it. Ship it.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <span class="brand">Train<span>It</span></span>
+    <span class="sep">/</span>
+    <span class="here">Catalog</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Self-paced · with Claude Code as your tutor</div>
+    <h1>Learn it. <span>Train it.</span> Ship it.</h1>
+    <p class="lead">Hands-on courses that take you from zero to job-ready. Pick a track to begin — new courses drop in as their own folders.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2 class="section-title">Courses</h2>
+  <div class="grid" data-courses><!-- rendered from data/courses.js --></div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">TrainIt · a Patroventure learning hub.</div>
+</footer>
+
+<script src="data/courses.js"></script>
+<script src="assets/js/main.js"></script>
+<script>TrainIt.renderCourseGrid("");</script>
+</body>
+</html>

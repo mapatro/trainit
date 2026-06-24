@@ -1,0 +1,83 @@
+/* TrainIt — shared styles for catalog + course index pages.
+ * Palette/fonts mirror the self-contained chapter pages so the app feels coherent.
+ * (Chapter pages carry their own inline styles and do not use this file.) */
+:root{
+  --ink:#13233B;
+  --ink-soft:#475569;
+  --paper:#F5F7FA;
+  --card:#FFFFFF;
+  --line:#E3E8EF;
+  --flow:#1D6FE0;
+  --flow-deep:#0B4FB0;
+  --flow-soft:#E8F1FD;
+  --check:#0E9C86;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;font-size:16.5px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--flow);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.wrap{max-width:900px;margin:0 auto;padding:0 22px;}
+
+/* top nav */
+nav.top{background:#0B1626;border-bottom:1px solid #26384F;
+  font-family:'JetBrains Mono',monospace;}
+nav.top .wrap{display:flex;align-items:center;gap:14px;padding:11px 22px;font-size:12.5px;}
+nav.top a{color:#9DB2CC;}
+nav.top .brand{color:#7FB2F5;font-weight:600;}
+nav.top .brand span{color:#fff;}
+nav.top .sep{color:#475569;}
+nav.top .here{color:#7E93AC;}
+
+/* hero */
+header.hero{background:linear-gradient(160deg,#13233B 0%,#1B3358 60%,#1D6FE0 160%);
+  color:#fff;padding:54px 0 46px;position:relative;overflow:hidden;}
+header.hero::after{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.10) 1px,transparent 0);
+  background-size:26px 26px;opacity:.5;pointer-events:none;}
+header.hero .wrap{position:relative;z-index:1;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:#9EC2F2;margin-bottom:14px;}
+header.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;
+  font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0 0 14px;letter-spacing:-.02em;}
+header.hero h1 span{color:#7FB2F5;}
+header.hero p.lead{font-size:17px;color:#D6E2F2;max-width:60ch;margin:0;}
+
+/* section + cards */
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:15px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-soft);margin:34px 0 16px;font-weight:600;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px;padding-bottom:48px;}
+.card{display:block;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:20px;transition:.15s;color:var(--ink);}
+.card:hover{transform:translateY(-3px);border-color:#BAD6F8;text-decoration:none;
+  box-shadow:0 8px 24px rgba(19,35,59,.08);}
+.card[aria-disabled="true"]{opacity:.55;pointer-events:none;}
+.card .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--flow);font-weight:600;
+  background:var(--flow-soft);border:1px solid #BAD6F8;padding:3px 9px;border-radius:999px;
+  margin-bottom:12px;}
+.card h3{font-family:'Space Grotesk',sans-serif;margin:0 0 6px;font-size:1.15rem;}
+.card p{margin:0;color:var(--ink-soft);font-size:.95rem;}
+.card .meta{margin-top:14px;color:var(--ink-soft);font-size:.85rem;
+  font-family:'JetBrains Mono',monospace;}
+
+/* chapter list */
+.chapters{list-style:none;padding:0;margin:0 0 48px;}
+.chapters li{display:flex;align-items:center;gap:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);padding:13px 18px;margin-bottom:9px;}
+.chapters li.soon{opacity:.6;}
+.chapters .num{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;
+  background:var(--flow);color:#fff;border-radius:9px;font-family:'Space Grotesk',sans-serif;
+  font-weight:700;}
+.chapters li.soon .num{background:#CBD5E1;}
+.chapters a{flex:1;color:var(--ink);font-weight:600;}
+.chapters .soon-tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:#94A3B8;}
+
+footer.site-footer{border-top:1px solid var(--line);color:#94A3B8;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:24px 0;margin-top:24px;}

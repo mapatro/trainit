@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MuleSoft with Claude Code — TrainIt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../assets/css/styles.css" />
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Train<span>It</span></a>
+    <span class="sep">/</span>
+    <span class="here">MuleSoft</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Integration · Certified Developer Level 1 path</div>
+    <h1>MuleSoft <span>with Claude Code</span></h1>
+    <p class="lead">Twelve chapters from foundations to deployment, with a Claude Code prompt and a self-check at every step. Work through them in order.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2 class="section-title">Chapters</h2>
+  <ol class="chapters" data-chapters><!-- rendered from data/courses.js --></ol>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap"><a href="../../index.html">← Back to catalog</a></div>
+</footer>
+
+<script src="../../data/courses.js"></script>
+<script>
+(function () {
+  var course = COURSES.find(function (c) { return c.slug === "mulesoft"; });
+  var host = document.querySelector("[data-chapters]");
+  if (!course || !host) return;
+  host.innerHTML = course.chapters.map(function (ch, i) {
+    var n = i + 1;
+    if (ch.ready) {
+      return '<li><span class="num">' + n + '</span>' +
+             '<a href="' + ch.file + '">' + ch.title + '</a></li>';
+    }
+    return '<li class="soon"><span class="num">' + n + '</span>' +
+           '<span>' + ch.title + '</span>' +
+           '<span class="soon-tag">coming soon</span></li>';
+  }).join("");
+})();
+</script>
+</body>
+</html>
