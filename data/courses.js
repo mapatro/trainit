@@ -35,6 +35,30 @@ var COURSES = [
     ]
   },
 
+  {
+    slug: "digital-marketing",
+    title: "Digital Marketing — Grow ClearEaty with AI",
+    category: "Growth",
+    summary: "Hands-on growth playbook: SEO, ASO, organic social, Reddit, Instagram/Facebook ads, creators & a 90-day launch plan — every step produces a real ClearEaty asset using AI.",
+    available: true,
+    chapters: [
+      { file: "chapter-1.html",  title: "Positioning & personas",               ready: true },
+      { file: "chapter-2.html",  title: "Funnel, goals & metrics",              ready: true },
+      { file: "chapter-3.html",  title: "Brand voice & identity",               ready: true },
+      { file: "chapter-4.html",  title: "Landing page & website",               ready: true },
+      { file: "chapter-5.html",  title: "App Store Optimization (ASO)",         ready: true },
+      { file: "chapter-6.html",  title: "Content & SEO",                        ready: true },
+      { file: "chapter-7.html",  title: "Organic social & communities",         ready: true },
+      { file: "chapter-8.html",  title: "Short-form video & creative",          ready: true },
+      { file: "chapter-9.html",  title: "Email, push & lifecycle",              ready: true },
+      { file: "chapter-10.html", title: "Paid advertising",                     ready: true },
+      { file: "chapter-11.html", title: "Influencer & creator marketing",       ready: true },
+      { file: "chapter-12.html", title: "Conversion optimization & A/B testing", ready: true },
+      { file: "chapter-13.html", title: "Analytics & reporting",                ready: true },
+      { file: "chapter-14.html", title: "Launch & 90-day growth playbook",      ready: true }
+    ]
+  },
+
   // --- Future courses: drop a folder under courses/ and flip available. ---
   {
     slug: "database",
