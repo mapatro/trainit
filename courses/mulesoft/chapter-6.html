@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chapter 6 · Routers &amp; flow control — MuleSoft · TrainIt</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+  :root{
+    --ink:#13233B;--ink-soft:#475569;--paper:#F5F7FA;--card:#FFFFFF;--line:#E3E8EF;
+    --flow:#1D6FE0;--flow-deep:#0B4FB0;--flow-soft:#E8F1FD;--signal:#E8633A;--signal-soft:#FCEBE4;
+    --check:#0E9C86;--check-soft:#E1F4F0;--term-bg:#0E1B2E;--term-line:#26384F;--term-text:#C9D7E8;--radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:840px;margin:0 auto;padding:0 22px 100px;}
+  header.hero{background:linear-gradient(160deg,#13233B 0%,#1B3358 60%,#1D6FE0 160%);color:#fff;padding:54px 0 46px;margin-bottom:8px;position:relative;overflow:hidden;}
+  header.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.10) 1px,transparent 0);background-size:26px 26px;opacity:.5;pointer-events:none;}
+  .hero .wrap{position:relative;z-index:1;padding-bottom:0;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#9EC2F2;margin-bottom:14px;}
+  .hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0 0 14px;letter-spacing:-.02em;}
+  .hero h1 span{color:#7FB2F5;}
+  .hero p.lead{font-size:17px;color:#D6E2F2;max-width:60ch;margin:0;}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#E6EEFA;padding:6px 11px;border-radius:999px;letter-spacing:.02em;}
+  .roadmap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 22px 8px;margin:30px 0 12px;}
+  .roadmap h2{font-family:'Space Grotesk',sans-serif;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 16px;font-weight:600;}
+  .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+  .chip{display:flex;gap:10px;align-items:baseline;padding:9px 11px;border-radius:9px;border:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);background:#FCFDFE;}
+  .chip b{font-family:'JetBrains Mono',monospace;font-size:12px;color:#94A3B8;}
+  .chip.active{background:var(--flow-soft);border-color:#BAD6F8;color:var(--flow-deep);font-weight:600;}
+  .chip.active b{color:var(--flow);}
+  .chip.done{color:#7C8AA0;}
+  .chip.done b{color:#0E9C86;}
+  .station{position:relative;padding-top:34px;margin-top:8px;}
+  .station::before{content:"";position:absolute;left:18px;top:-14px;width:2px;height:30px;background:repeating-linear-gradient(var(--line) 0 4px,transparent 4px 8px);}
+  .station:first-of-type::before{display:none;}
+  .st-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+  .node{flex:0 0 auto;width:38px;height:38px;border-radius:11px;background:var(--flow);color:#fff;display:grid;place-items:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;box-shadow:0 4px 12px rgba(29,111,224,.28);}
+  .st-head h2{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:0;letter-spacing:-.01em;line-height:1.15;}
+  .station > p{color:var(--ink-soft);margin:8px 0 14px;}
+  .station .sub{font-weight:600;color:var(--ink);margin:22px 0 6px;font-size:15.5px;font-family:'Space Grotesk',sans-serif;}
+  figure{margin:18px 0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px 12px;}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-size:13px;color:var(--ink-soft);text-align:center;margin-top:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.01em;}
+  .flow-dash{stroke-dasharray:6 6;animation:dash 1.1s linear infinite;}
+  @keyframes dash{to{stroke-dashoffset:-24;}}
+  .block{border-radius:var(--radius);padding:16px 18px;margin:16px 0;}
+  .block .tag{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:3px 9px;border-radius:6px;margin-bottom:10px;}
+  .do{background:#fff;border:1px solid var(--line);}
+  .do .tag{background:var(--signal-soft);color:#B8421C;}
+  .do ol{margin:4px 0 2px;padding-left:20px;}
+  .do li{margin:7px 0;}
+  .do li::marker{color:var(--signal);font-weight:600;}
+  .test{background:var(--check-soft);border:1px solid #BFE6DE;}
+  .test .tag{background:#fff;color:#0B7D6B;border:1px solid #BFE6DE;}
+  .test ul{list-style:none;margin:4px 0 0;padding:0;}
+  .test li{position:relative;padding-left:28px;margin:8px 0;color:#0d5045;}
+  .test li::before{content:"\2713";position:absolute;left:4px;top:0;color:var(--check);font-weight:700;}
+  .prompt{background:var(--term-bg);border:1px solid var(--term-line);border-radius:var(--radius);margin:14px 0;overflow:hidden;}
+  .prompt .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--term-line);background:#0A1626;}
+  .prompt .bar .dot{width:10px;height:10px;border-radius:50%;}
+  .d1{background:#E8633A;}.d2{background:#E8B23A;}.d3{background:#3AC58A;}
+  .prompt .bar span{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#7E93AC;margin-left:6px;}
+  .prompt .bar button{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;background:transparent;border:1px solid var(--term-line);color:#9DB2CC;border-radius:6px;padding:4px 10px;cursor:pointer;transition:.15s;}
+  .prompt .bar button:hover{background:var(--flow);border-color:var(--flow);color:#fff;}
+  .prompt pre{margin:0;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;color:var(--term-text);white-space:pre-wrap;word-break:break-word;}
+  .prompt pre .pre-mark{color:#5BC58A;user-select:none;}
+  code.inline{font-family:'JetBrains Mono',monospace;font-size:.86em;background:#EEF2F7;border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:var(--flow-deep);}
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+  .vcard{border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px;background:#fff;}
+  .vcard.pick{border-color:#BAD6F8;background:var(--flow-soft);}
+  .vcard h4{font-family:'Space Grotesk',sans-serif;margin:0 0 4px;font-size:16px;}
+  .vcard ul{margin:10px 0 0;padding-left:18px;font-size:14px;color:var(--ink-soft);}
+  .vcard li{margin:5px 0;}
+  a{color:var(--flow);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;}
+  a:hover{border-bottom-color:var(--flow);}
+  .more{font-size:13.5px;color:var(--ink-soft);margin:10px 0 2px;}
+  .more::before{content:"\2197 ";color:var(--flow);}
+  .note{font-size:13.5px;color:var(--ink-soft);background:#FFF8F1;border-left:3px solid var(--signal);padding:10px 14px;border-radius:0 9px 9px 0;margin:14px 0;}
+  .finish{background:linear-gradient(160deg,#0E9C86,#0B7D6B);color:#fff;border-radius:var(--radius);padding:26px 24px;margin-top:40px;}
+  .finish h2{font-family:'Space Grotesk',sans-serif;margin:0 0 8px;font-size:22px;}
+  .finish p{margin:6px 0;color:#D8F3ED;}
+  .finish .next{font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:9px;display:inline-block;}
+  footer{text-align:center;font-size:12.5px;color:#94A3B8;margin-top:40px;font-family:'JetBrains Mono',monospace;}
+  @media(max-width:560px){.versus{grid-template-columns:1fr;}.st-head h2{font-size:21px;}body{font-size:16px;}}
+  @media(prefers-reduced-motion:reduce){.flow-dash{animation:none;}html{scroll-behavior:auto;}}
+
+  .course-shell{max-width:1180px;margin:0 auto;padding:0 22px 100px;display:grid;grid-template-columns:230px minmax(0,840px);gap:36px;justify-content:center;align-items:start;}
+  .course-main{min-width:0;}
+  .sidenav{position:sticky;top:18px;align-self:start;}
+  .sidenav-head{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin:26px 0 12px;font-weight:600;}
+  .sidenav-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;}
+  .sidenav-list li{display:flex;gap:9px;align-items:baseline;padding:8px 11px;border-radius:9px;font-size:13px;color:var(--ink-soft);border:1px solid transparent;}
+  .sidenav-list li b{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#94A3B8;}
+  .sidenav-list li.done{opacity:.75;}
+  .sidenav-list li.done b{color:#0E9C86;}
+  .sidenav-list li.active{background:var(--flow-soft);border-color:#BAD6F8;color:var(--flow-deep);font-weight:600;}
+  .sidenav-list li.active b{color:var(--flow);}
+  .sidenav-back{display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  @media(max-width:900px){.course-shell{grid-template-columns:1fr;gap:0;}.sidenav{position:static;}.sidenav-head{margin-top:18px;}.sidenav-list{flex-direction:row;flex-wrap:wrap;gap:6px;}.sidenav-list li{font-size:12.5px;}}
+</style></head><body><nav style="background:#0B1626;border-bottom:1px solid #26384F;font-family:'JetBrains Mono',monospace;"><div style="max-width:840px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:14px;font-size:12.5px;"><a href="../../index.html" style="color:#7FB2F5;font-weight:600;border:none;">Train<span style="color:#fff;">It</span></a><span style="color:#475569;">/</span><a href="index.html" style="color:#9DB2CC;border:none;">MuleSoft</a><span style="color:#475569;">/</span><span style="color:#7E93AC;">Chapter 6</span><a href="index.html" style="margin-left:auto;color:#9DB2CC;border:none;">&larr; All chapters</a></div></nav><header class="hero"><div class="wrap"><div class="eyebrow">Learn MuleSoft · with Claude Code as your tutor</div><h1>Chapter 6 — <span>Routers & flow control</span></h1><p class="lead">Real flows make decisions: send this here, do those in parallel, repeat for each item. Mule's routers handle all of it.</p><div class="meta"><span class="pill">⏱ ~70 minutes</span><span class="pill">🔀 Choice, Scatter-Gather, For Each</span><span class="pill">🧩 Core components</span></div></div></header><div class="course-shell"><aside class="sidenav"><div class="sidenav-head">The full course map</div><ol class="sidenav-list"><li class="done"><b>01</b> Foundations & first run</li><li class="done"><b>02</b> Mule events & HTTP Listener</li><li class="done"><b>03</b> Calling APIs (HTTP Request)</li><li class="done"><b>04</b> File & Database connectors</li><li class="done"><b>05</b> DataWeave 2.0 transforms</li><li class="active"><b>06</b> Routers & flow control</li><li><b>07</b> Error handling</li><li><b>08</b> API design (RAML / APIkit)</li><li><b>09</b> Batch processing</li><li><b>10</b> Deploy to CloudHub</li><li><b>11</b> Testing with MUnit</li><li><b>12</b> Cert prep & portfolio</li></ol><a class="sidenav-back" href="index.html">&larr; All chapters</a></aside><main class="course-main"><p class="note">Same rhythm every chapter: a quick idea, a diagram, <b>Do this</b> steps, a <b>Claude Code</b> prompt, and a <b>Check yourself</b> test.</p><section class="station"><div class="st-head"><div class="node">1</div><h2>The three routers you must know</h2></div><p><b>Choice</b> picks ONE branch based on a condition (like if/else). <b>Scatter-Gather</b> runs several branches at the same time and gathers all results. <b>For Each</b> loops through a list one item at a time.</p><figure><svg viewBox="0 0 640 220" role="img" aria-label="Choice, Scatter-Gather and For Each routers">
+<g font-family="Space Grotesk,sans-serif">
+<text x="105" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#1D6FE0">CHOICE</text>
+<rect x="70" y="34" width="70" height="34" rx="8" fill="#1D6FE0"/><text x="105" y="56" text-anchor="middle" font-size="11" fill="#fff">if?</text>
+<line x1="105" y1="68" x2="55" y2="96" stroke="#1D6FE0"/><line x1="105" y1="68" x2="155" y2="96" stroke="#1D6FE0"/>
+<rect x="22" y="96" width="66" height="28" rx="7" fill="#fff" stroke="#CBD5E1"/><text x="55" y="115" text-anchor="middle" font-size="10" fill="#13233B">path A</text>
+<rect x="122" y="96" width="66" height="28" rx="7" fill="#fff" stroke="#CBD5E1"/><text x="155" y="115" text-anchor="middle" font-size="10" fill="#13233B">path B</text>
+<text x="105" y="150" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#475569">picks ONE branch</text>
+
+<text x="320" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#0E9C86">SCATTER-GATHER</text>
+<rect x="288" y="34" width="64" height="34" rx="8" fill="#0E9C86"/><text x="320" y="56" text-anchor="middle" font-size="11" fill="#fff">split</text>
+<line x1="320" y1="68" x2="270" y2="96" stroke="#0E9C86"/><line x1="320" y1="68" x2="320" y2="96" stroke="#0E9C86"/><line x1="320" y1="68" x2="370" y2="96" stroke="#0E9C86"/>
+<rect x="246" y="96" width="48" height="26" rx="7" fill="#fff" stroke="#9FD8CC"/>
+<rect x="298" y="96" width="44" height="26" rx="7" fill="#fff" stroke="#9FD8CC"/>
+<rect x="346" y="96" width="48" height="26" rx="7" fill="#fff" stroke="#9FD8CC"/>
+<text x="320" y="150" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#475569">runs ALL at once</text>
+
+<text x="535" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#E8633A">FOR EACH</text>
+<rect x="500" y="34" width="70" height="34" rx="8" fill="#E8633A"/><text x="535" y="56" text-anchor="middle" font-size="11" fill="#fff">loop</text>
+<rect x="500" y="92" width="70" height="26" rx="7" fill="#fff" stroke="#F2C3AE"/><text x="535" y="110" text-anchor="middle" font-size="10" fill="#13233B">item</text>
+<path d="M570 105 q34 -6 0 -40" fill="none" stroke="#E8633A" stroke-dasharray="4 4"/><polygon points="572,68 576,78 566,76" fill="#E8633A"/>
+<text x="535" y="150" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#475569">one item at a time</text>
+</g></svg><figcaption>Choice = one branch. Scatter-Gather = all at once. For Each = one at a time.</figcaption></figure></section><section class="station"><div class="st-head"><div class="node">2</div><h2>Choice in practice</h2></div><p>A Choice has <code class="inline">when</code> branches with conditions and one <code class="inline">otherwise</code> fallback. Conditions are DataWeave expressions, e.g. <code class="inline">#[attributes.queryParams.type == 'gold']</code>.</p></section><section class="station"><div class="st-head"><div class="node">3</div><h2>Build a Choice flow</h2></div><div class="block do"><span class="tag">● Do this</span><ol><li>In your <code class="inline">/hello</code> flow, add a <b>Choice</b> router after the listener.</li><li>Add a <code class="inline">when</code> that checks a query parameter, e.g. <code class="inline">#[attributes.queryParams.vip == 'true']</code>, and Set Payload to <code class="inline">Welcome VIP</code>.</li><li>In <code class="inline">otherwise</code>, Set Payload to <code class="inline">Welcome guest</code>.</li><li>Run it.</li></ol></div></section><section class="station"><div class="st-head"><div class="node">4</div><h2>Test</h2></div><div class="block test"><span class="tag">✓ Check yourself</span><ul><li><code class="inline">http://localhost:8081/hello?vip=true</code> returns <b>Welcome VIP</b>.</li><li><code class="inline">http://localhost:8081/hello</code> returns <b>Welcome guest</b>.</li><li>You can describe when you'd use Scatter-Gather vs For Each.</li></ul></div></section><section class="station"><div class="st-head"><div class="node">5</div><h2>When to use which</h2></div><p>Use <b>Scatter-Gather</b> when you need data from several systems and they don't depend on each other (faster, parallel). Use <b>For Each</b> when you must process items in order or one-by-one. Use <b>Choice</b> for branching logic.</p><p class="more"><a href="https://docs.mulesoft.com/mule-runtime/latest/choice-router-concept" target="_blank" rel="noopener">More: routers (official docs)</a></p></section><section class="station"><div class="st-head"><div class="node">6</div><h2>Ask your tutor</h2></div><div class="prompt"><div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · build a choice</span><button onclick="copyPrompt(this)">Copy</button></div><pre><span class="pre-mark">› </span>Add a Choice router to my flow that returns 'Welcome VIP' when ?vip=true and 'Welcome guest' otherwise. Show the XML and explain the DataWeave condition.</pre></div><div class="prompt"><div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · quiz me</span><button onclick="copyPrompt(this)">Copy</button></div><pre><span class="pre-mark">› </span>Quiz me with 4 scenarios and ask which router fits each (Choice, Scatter-Gather, or For Each), one at a time, then explain my mistakes.</pre></div></section><section class="finish"><h2>Chapter 6 complete 🎉</h2><p>Your flows can branch, parallelize, and loop — the control flow the exam loves to test.</p><div class="next">Next → Chapter 7: handling things when they go wrong.</div></section><footer>TrainIt · MuleSoft × Claude Code · Chapter 6 of 12 · Built for a beginner, aimed at a job.</footer></main></div><script>
+  function copyPrompt(btn){
+    var pre = btn.closest('.prompt').querySelector('pre');
+    var text = pre.innerText.replace(/^\u203a\s?/,'').trim();
+    navigator.clipboard.writeText(text).then(function(){
+      var old = btn.textContent; btn.textContent = 'Copied \u2713';
+      setTimeout(function(){ btn.textContent = old; }, 1400);
+    }).catch(function(){
+      btn.textContent = 'Select & copy';
+      setTimeout(function(){ btn.textContent = 'Copy'; }, 1600);
+    });
+  }
+</script></body></html>

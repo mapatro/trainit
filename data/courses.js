@@ -20,18 +20,18 @@ var COURSES = [
     summary: "From zero to MuleSoft Certified Developer Level 1, with Claude Code as your tutor.",
     available: true,
     chapters: [
-      { file: "chapter-1.html",  title: "Foundations & first run",        ready: true  },
-      { file: "chapter-2.html",  title: "Mule events & HTTP Listener",    ready: false },
-      { file: "chapter-3.html",  title: "Calling APIs (HTTP Request)",    ready: false },
-      { file: "chapter-4.html",  title: "File & Database connectors",     ready: false },
-      { file: "chapter-5.html",  title: "DataWeave 2.0 transforms",       ready: false },
-      { file: "chapter-6.html",  title: "Routers & flow control",         ready: false },
-      { file: "chapter-7.html",  title: "Error handling",                 ready: false },
-      { file: "chapter-8.html",  title: "API design (RAML / APIkit)",     ready: false },
-      { file: "chapter-9.html",  title: "Batch processing",               ready: false },
-      { file: "chapter-10.html", title: "Deploy to CloudHub",             ready: false },
-      { file: "chapter-11.html", title: "Testing with MUnit",            ready: false },
-      { file: "chapter-12.html", title: "Cert prep & portfolio",          ready: false }
+      { file: "chapter-1.html",  title: "Foundations & first run",       ready: true },
+      { file: "chapter-2.html",  title: "Mule events & the HTTP Listener", ready: true },
+      { file: "chapter-3.html",  title: "Calling APIs with HTTP Request", ready: true },
+      { file: "chapter-4.html",  title: "File & Database connectors",     ready: true },
+      { file: "chapter-5.html",  title: "DataWeave 2.0 transforms",       ready: true },
+      { file: "chapter-6.html",  title: "Routers & flow control",         ready: true },
+      { file: "chapter-7.html",  title: "Error handling",                 ready: true },
+      { file: "chapter-8.html",  title: "API design with RAML & APIkit",  ready: true },
+      { file: "chapter-9.html",  title: "Batch processing",               ready: true },
+      { file: "chapter-10.html", title: "Deploy to CloudHub",             ready: true },
+      { file: "chapter-11.html", title: "Testing with MUnit",             ready: true },
+      { file: "chapter-12.html", title: "Cert prep & portfolio",          ready: true }
     ]
   },
 

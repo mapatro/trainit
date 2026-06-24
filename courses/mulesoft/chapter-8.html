@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chapter 8 · API design with RAML &amp; APIkit — MuleSoft · TrainIt</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>
+  :root{
+    --ink:#13233B;--ink-soft:#475569;--paper:#F5F7FA;--card:#FFFFFF;--line:#E3E8EF;
+    --flow:#1D6FE0;--flow-deep:#0B4FB0;--flow-soft:#E8F1FD;--signal:#E8633A;--signal-soft:#FCEBE4;
+    --check:#0E9C86;--check-soft:#E1F4F0;--term-bg:#0E1B2E;--term-line:#26384F;--term-text:#C9D7E8;--radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:840px;margin:0 auto;padding:0 22px 100px;}
+  header.hero{background:linear-gradient(160deg,#13233B 0%,#1B3358 60%,#1D6FE0 160%);color:#fff;padding:54px 0 46px;margin-bottom:8px;position:relative;overflow:hidden;}
+  header.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.10) 1px,transparent 0);background-size:26px 26px;opacity:.5;pointer-events:none;}
+  .hero .wrap{position:relative;z-index:1;padding-bottom:0;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#9EC2F2;margin-bottom:14px;}
+  .hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0 0 14px;letter-spacing:-.02em;}
+  .hero h1 span{color:#7FB2F5;}
+  .hero p.lead{font-size:17px;color:#D6E2F2;max-width:60ch;margin:0;}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#E6EEFA;padding:6px 11px;border-radius:999px;letter-spacing:.02em;}
+  .roadmap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 22px 8px;margin:30px 0 12px;}
+  .roadmap h2{font-family:'Space Grotesk',sans-serif;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 16px;font-weight:600;}
+  .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+  .chip{display:flex;gap:10px;align-items:baseline;padding:9px 11px;border-radius:9px;border:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);background:#FCFDFE;}
+  .chip b{font-family:'JetBrains Mono',monospace;font-size:12px;color:#94A3B8;}
+  .chip.active{background:var(--flow-soft);border-color:#BAD6F8;color:var(--flow-deep);font-weight:600;}
+  .chip.active b{color:var(--flow);}
+  .chip.done{color:#7C8AA0;}
+  .chip.done b{color:#0E9C86;}
+  .station{position:relative;padding-top:34px;margin-top:8px;}
+  .station::before{content:"";position:absolute;left:18px;top:-14px;width:2px;height:30px;background:repeating-linear-gradient(var(--line) 0 4px,transparent 4px 8px);}
+  .station:first-of-type::before{display:none;}
+  .st-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+  .node{flex:0 0 auto;width:38px;height:38px;border-radius:11px;background:var(--flow);color:#fff;display:grid;place-items:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;box-shadow:0 4px 12px rgba(29,111,224,.28);}
+  .st-head h2{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:0;letter-spacing:-.01em;line-height:1.15;}
+  .station > p{color:var(--ink-soft);margin:8px 0 14px;}
+  .station .sub{font-weight:600;color:var(--ink);margin:22px 0 6px;font-size:15.5px;font-family:'Space Grotesk',sans-serif;}
+  figure{margin:18px 0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px 12px;}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-size:13px;color:var(--ink-soft);text-align:center;margin-top:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.01em;}
+  .flow-dash{stroke-dasharray:6 6;animation:dash 1.1s linear infinite;}
+  @keyframes dash{to{stroke-dashoffset:-24;}}
+  .block{border-radius:var(--radius);padding:16px 18px;margin:16px 0;}
+  .block .tag{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:3px 9px;border-radius:6px;margin-bottom:10px;}
+  .do{background:#fff;border:1px solid var(--line);}
+  .do .tag{background:var(--signal-soft);color:#B8421C;}
+  .do ol{margin:4px 0 2px;padding-left:20px;}
+  .do li{margin:7px 0;}
+  .do li::marker{color:var(--signal);font-weight:600;}
+  .test{background:var(--check-soft);border:1px solid #BFE6DE;}
+  .test .tag{background:#fff;color:#0B7D6B;border:1px solid #BFE6DE;}
+  .test ul{list-style:none;margin:4px 0 0;padding:0;}
+  .test li{position:relative;padding-left:28px;margin:8px 0;color:#0d5045;}
+  .test li::before{content:"\2713";position:absolute;left:4px;top:0;color:var(--check);font-weight:700;}
+  .prompt{background:var(--term-bg);border:1px solid var(--term-line);border-radius:var(--radius);margin:14px 0;overflow:hidden;}
+  .prompt .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--term-line);background:#0A1626;}
+  .prompt .bar .dot{width:10px;height:10px;border-radius:50%;}
+  .d1{background:#E8633A;}.d2{background:#E8B23A;}.d3{background:#3AC58A;}
+  .prompt .bar span{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#7E93AC;margin-left:6px;}
+  .prompt .bar button{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;background:transparent;border:1px solid var(--term-line);color:#9DB2CC;border-radius:6px;padding:4px 10px;cursor:pointer;transition:.15s;}
+  .prompt .bar button:hover{background:var(--flow);border-color:var(--flow);color:#fff;}
+  .prompt pre{margin:0;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;color:var(--term-text);white-space:pre-wrap;word-break:break-word;}
+  .prompt pre .pre-mark{color:#5BC58A;user-select:none;}
+  code.inline{font-family:'JetBrains Mono',monospace;font-size:.86em;background:#EEF2F7;border:1px solid var(--line);padding:1px 6px;border-radius:5px;color:var(--flow-deep);}
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+  .vcard{border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px;background:#fff;}
+  .vcard.pick{border-color:#BAD6F8;background:var(--flow-soft);}
+  .vcard h4{font-family:'Space Grotesk',sans-serif;margin:0 0 4px;font-size:16px;}
+  .vcard ul{margin:10px 0 0;padding-left:18px;font-size:14px;color:var(--ink-soft);}
+  .vcard li{margin:5px 0;}
+  a{color:var(--flow);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;}
+  a:hover{border-bottom-color:var(--flow);}
+  .more{font-size:13.5px;color:var(--ink-soft);margin:10px 0 2px;}
+  .more::before{content:"\2197 ";color:var(--flow);}
+  .note{font-size:13.5px;color:var(--ink-soft);background:#FFF8F1;border-left:3px solid var(--signal);padding:10px 14px;border-radius:0 9px 9px 0;margin:14px 0;}
+  .finish{background:linear-gradient(160deg,#0E9C86,#0B7D6B);color:#fff;border-radius:var(--radius);padding:26px 24px;margin-top:40px;}
+  .finish h2{font-family:'Space Grotesk',sans-serif;margin:0 0 8px;font-size:22px;}
+  .finish p{margin:6px 0;color:#D8F3ED;}
+  .finish .next{font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:14px;background:rgba(255,255,255,.12);padding:10px 14px;border-radius:9px;display:inline-block;}
+  footer{text-align:center;font-size:12.5px;color:#94A3B8;margin-top:40px;font-family:'JetBrains Mono',monospace;}
+  @media(max-width:560px){.versus{grid-template-columns:1fr;}.st-head h2{font-size:21px;}body{font-size:16px;}}
+  @media(prefers-reduced-motion:reduce){.flow-dash{animation:none;}html{scroll-behavior:auto;}}
+
+  .course-shell{max-width:1180px;margin:0 auto;padding:0 22px 100px;display:grid;grid-template-columns:230px minmax(0,840px);gap:36px;justify-content:center;align-items:start;}
+  .course-main{min-width:0;}
+  .sidenav{position:sticky;top:18px;align-self:start;}
+  .sidenav-head{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin:26px 0 12px;font-weight:600;}
+  .sidenav-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;}
+  .sidenav-list li{display:flex;gap:9px;align-items:baseline;padding:8px 11px;border-radius:9px;font-size:13px;color:var(--ink-soft);border:1px solid transparent;}
+  .sidenav-list li b{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#94A3B8;}
+  .sidenav-list li.done{opacity:.75;}
+  .sidenav-list li.done b{color:#0E9C86;}
+  .sidenav-list li.active{background:var(--flow-soft);border-color:#BAD6F8;color:var(--flow-deep);font-weight:600;}
+  .sidenav-list li.active b{color:var(--flow);}
+  .sidenav-back{display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  @media(max-width:900px){.course-shell{grid-template-columns:1fr;gap:0;}.sidenav{position:static;}.sidenav-head{margin-top:18px;}.sidenav-list{flex-direction:row;flex-wrap:wrap;gap:6px;}.sidenav-list li{font-size:12.5px;}}
+</style></head><body><nav style="background:#0B1626;border-bottom:1px solid #26384F;font-family:'JetBrains Mono',monospace;"><div style="max-width:840px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:14px;font-size:12.5px;"><a href="../../index.html" style="color:#7FB2F5;font-weight:600;border:none;">Train<span style="color:#fff;">It</span></a><span style="color:#475569;">/</span><a href="index.html" style="color:#9DB2CC;border:none;">MuleSoft</a><span style="color:#475569;">/</span><span style="color:#7E93AC;">Chapter 8</span><a href="index.html" style="margin-left:auto;color:#9DB2CC;border:none;">&larr; All chapters</a></div></nav><header class="hero"><div class="wrap"><div class="eyebrow">Learn MuleSoft · with Claude Code as your tutor</div><h1>Chapter 8 — <span>API design with RAML & APIkit</span></h1><p class="lead">Employers don't just want flows — they want well-designed APIs. This is MuleSoft's signature approach: design the contract first, then auto-generate the implementation.</p><div class="meta"><span class="pill">⏱ ~85 minutes</span><span class="pill">📐 RAML / OAS spec</span><span class="pill">🏗 API-led connectivity</span></div></div></header><div class="course-shell"><aside class="sidenav"><div class="sidenav-head">The full course map</div><ol class="sidenav-list"><li class="done"><b>01</b> Foundations & first run</li><li class="done"><b>02</b> Mule events & HTTP Listener</li><li class="done"><b>03</b> Calling APIs (HTTP Request)</li><li class="done"><b>04</b> File & Database connectors</li><li class="done"><b>05</b> DataWeave 2.0 transforms</li><li class="done"><b>06</b> Routers & flow control</li><li class="done"><b>07</b> Error handling</li><li class="active"><b>08</b> API design (RAML / APIkit)</li><li><b>09</b> Batch processing</li><li><b>10</b> Deploy to CloudHub</li><li><b>11</b> Testing with MUnit</li><li><b>12</b> Cert prep & portfolio</li></ol><a class="sidenav-back" href="index.html">&larr; All chapters</a></aside><main class="course-main"><p class="note">Same rhythm every chapter: a quick idea, a diagram, <b>Do this</b> steps, a <b>Claude Code</b> prompt, and a <b>Check yourself</b> test.</p><section class="station"><div class="st-head"><div class="node">1</div><h2>API-led connectivity</h2></div><p>MuleSoft organizes APIs into three layers. <b>System APIs</b> unlock raw systems (a database, Salesforce). <b>Process APIs</b> hold business logic and combine data. <b>Experience APIs</b> shape data for a specific channel like a mobile app. The point is <b>reuse</b>: build once, plug in many times.</p><figure><svg viewBox="0 0 640 210" role="img" aria-label="API-led connectivity: experience, process and system layers">
+<g font-family="Space Grotesk,sans-serif">
+<rect x="150" y="20" width="340" height="46" rx="11" fill="#E8633A"/><text x="320" y="42" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">Experience APIs</text>
+<text x="320" y="58" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#FCE4DA">shaped for each channel (web, mobile)</text>
+<rect x="150" y="80" width="340" height="46" rx="11" fill="#1D6FE0"/><text x="320" y="102" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">Process APIs</text>
+<text x="320" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#D6E2F2">business logic, combines data</text>
+<rect x="150" y="140" width="340" height="46" rx="11" fill="#0E9C86"/><text x="320" y="162" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">System APIs</text>
+<text x="320" y="178" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="#D8F3ED">unlock raw systems (DB, SaaS)</text>
+<polygon points="120,30 120,176 104,103" fill="#94A3B8"/><text x="70" y="107" font-family="JetBrains Mono,monospace" font-size="10" fill="#475569">reuse &#8593;</text>
+</g></svg><figcaption>Experience → Process → System. Lower layers get reused by many upper ones.</figcaption></figure><p class="more"><a href="https://www.mulesoft.com/resources/api/types-of-apis-and-api-led-connectivity" target="_blank" rel="noopener">More: API-led connectivity</a></p></section><section class="station"><div class="st-head"><div class="node">2</div><h2>Design the contract first</h2></div><p>You describe an API in a spec language — <b>RAML</b> (MuleSoft's own) or <b>OAS/OpenAPI</b>. The spec lists resources (like <code class="inline">/customers</code>), methods, and responses. You can design it in <b>Design Center</b> and share it via <b>Exchange</b>.</p></section><section class="station"><div class="st-head"><div class="node">3</div><h2>APIkit turns the spec into flows</h2></div><p>Point <b>APIkit</b> at your spec and it <b>scaffolds</b> a router plus an empty flow for every endpoint — the skeleton is generated, you just fill in the logic.</p></section><section class="station"><div class="st-head"><div class="node">4</div><h2>Do it</h2></div><div class="block do"><span class="tag">● Do this</span><ol><li>Create a simple spec (RAML or OAS) with one resource, e.g. <code class="inline">GET /greeting</code> returning a message.</li><li>Use the <b>APIkit</b> scaffold action to generate the router and flows.</li><li>Implement the <code class="inline">GET /greeting</code> flow with a Set Payload.</li><li>Run the project.</li></ol></div></section><section class="station"><div class="st-head"><div class="node">5</div><h2>Test</h2></div><div class="block test"><span class="tag">✓ Check yourself</span><ul><li>The scaffold created one flow per endpoint in your spec.</li><li>Calling the scaffolded endpoint returns your implemented response.</li><li>You can explain System vs Process vs Experience APIs in your own words.</li></ul></div></section><section class="station"><div class="st-head"><div class="node">6</div><h2>Ask your tutor</h2></div><div class="prompt"><div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · write a spec</span><button onclick="copyPrompt(this)">Copy</button></div><pre><span class="pre-mark">› </span>Write me a tiny RAML 1.0 spec with one resource GET /greeting that returns a JSON message, then explain each section so I understand the structure.</pre></div><div class="prompt"><div class="bar"><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><span>claude code · scaffold help</span><button onclick="copyPrompt(this)">Copy</button></div><pre><span class="pre-mark">› </span>Explain how APIkit scaffolding works in MuleSoft and what files/flows it generates from my spec. Then help me implement the generated GET /greeting flow.</pre></div></section><section class="finish"><h2>Chapter 8 complete 🎉</h2><p>You can design an API contract and scaffold its implementation — the workflow that defines MuleSoft as a platform.</p><div class="next">Next → Chapter 9: processing large sets of records with batch.</div></section><footer>TrainIt · MuleSoft × Claude Code · Chapter 8 of 12 · Built for a beginner, aimed at a job.</footer></main></div><script>
+  function copyPrompt(btn){
+    var pre = btn.closest('.prompt').querySelector('pre');
+    var text = pre.innerText.replace(/^\u203a\s?/,'').trim();
+    navigator.clipboard.writeText(text).then(function(){
+      var old = btn.textContent; btn.textContent = 'Copied \u2713';
+      setTimeout(function(){ btn.textContent = old; }, 1400);
+    }).catch(function(){
+      btn.textContent = 'Select & copy';
+      setTimeout(function(){ btn.textContent = 'Copy'; }, 1600);
+    });
+  }
+</script></body></html>
